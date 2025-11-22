@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>호정마을 타운하우스 | 오시는길</title>
+
+  <style>
+    /* ===== 기본 ===== */
+    :root{
+      --black:#111;
+      --white:#fff;
+      --gray:#666;
+      --light:#f6f6f6;
+      --line:#e9e9e9;
+      --accent:#111; /* 1번 사이트는 과한 포인트 없이 무채색 고급톤 */
+      --header-h:72px;
+      --maxw:1200px;
+      --radius:10px;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0; color:var(--black); background:var(--white);
+      font-family: "Pretendard","Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      line-height:1.6;
+    }
+    a{color:inherit; text-decoration:none;}
+    ul{list-style:none; padding:0; margin:0;}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px;}
+
+    /* ===== 상단 고정 헤더 / 2단 드롭다운 ===== */
+    header{
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      height:var(--header-h); background:rgba(255,255,255,0.98);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center;
+    }
+    .header-inner{width:100%; display:flex; align-items:center; justify-content:space-between;}
+    .logo{
+      font-weight:700; letter-spacing:-0.3px; font-size:18px;
+      display:flex; align-items:center; gap:8px;
+    }
+    nav{display:flex; align-items:center; gap:22px;}
+    .gnb{display:flex; align-items:center; gap:18px; font-size:15px;}
+    .gnb > li{position:relative; padding:10px 6px;}
+    .gnb > li > a{display:block; padding:6px 2px;}
+    .gnb > li:hover > a{font-weight:700;}
+    /* 2단 메뉴 */
+    .sub{
+      position:absolute; top:100%; left:0;
+      min-width:150px; background:#fff; border:1px solid var(--line);
+      padding:8px 0; border-radius:8px; box-shadow:0 8px 20px rgba(0,0,0,0.06);
+      opacity:0; transform:translateY(8px); pointer-events:none;
+      transition:0.2s ease;
+    }
+    .gnb > li:hover .sub{
+      opacity:1; transform:translateY(0); pointer-events:auto;
+    }
+    .sub li a{
+      display:block; padding:9px 14px; font-size:14px; color:#222;
+      white-space:nowrap;
+    }
+    .sub li a:hover{background:var(--light); font-weight:700;}
+
+    /* 우측 CTA: 1번 사이트 상단에 방문예약/전화 노출 */
+    .header-cta{
+      display:flex; align-items:center; gap:12px;
+      font-size:14px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:9px 14px; border-radius:999px; border:1px solid var(--black);
+      font-weight:600; background:#fff; transition:0.2s;
+    }
+    .btn:hover{background:var(--black); color:#fff;}
+    .tel{font-weight:800; letter-spacing:0.3px;}
+
+    /* 모바일 메뉴 */
+    .m-btn{display:none; width:40px; height:40px; border:1px solid var(--line); border-radius:8px; background:#fff;}
+    .m-nav{
+      display:none; position:fixed; top:var(--header-h); left:0; right:0; background:#fff; border-bottom:1px solid var(--line);
+    }
+    .m-nav .m-item{border-top:1px solid var(--line);}
+    .m-nav .m-item > button{
+      width:100%; background:#fff; border:0; padding:14px 18px; text-align:left; font-size:15px; font-weight:700;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .m-sub{display:none; background:var(--light);}
+    .m-sub a{display:block; padding:12px 22px; font-size:14px; border-top:1px solid #eee;}
+
+    /* ===== 서브 상단 비주얼 ===== */
+    .sub-hero{
+      margin-top:var(--header-h);
+      height:240px; background:#111 url('images/sub-hero.jpg') center/cover no-repeat;
+      color:#fff; display:flex; align-items:center;
+      position:relative;
+    }
+    .sub-hero::after{
+      content:""; position:absolute; inset:0; background:rgba(0,0,0,0.35);
+    }
+    .sub-hero .wrap{position:relative; z-index:1;}
+    .sub-hero .title{
+      font-size:34px; font-weight:800; letter-spacing:-1px;
+    }
+    .sub-hero .crumb{
+      margin-top:6px; font-size:13px; color:rgba(255,255,255,0.9);
+    }
+
+    /* ===== 서브 탭(사업안내 하위) ===== */
+    .sub-tabs{
+      border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .sub-tabs ul{
+      display:flex; gap:0; justify-content:center;
+    }
+    .sub-tabs a{
+      display:block; padding:16px 22px; font-size:14px; color:#333; border-bottom:2px solid transparent;
+    }
+    .sub-tabs a.active{
+      font-weight:800; border-bottom-color:var(--black);
+    }
+
+    /* ===== 콘텐츠 ===== */
+    section{padding:60px 0;}
+    .section-title{
+      text-align:center; font-size:26px; font-weight:800; letter-spacing:-0.6px;
+      margin-bottom:28px;
+    }
+    .map-box{
+      background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+      box-shadow:0 8px 24px rgba(0,0,0,0.04);
+    }
+    .map-img{
+      width:100%; display:block; aspect-ratio: 16 / 7; object-fit:cover; background:#ddd;
+    }
+    .addr-wrap{
+      display:grid; grid-template-columns:1fr; gap:16px; padding:20px;
+    }
+    .addr-item{
+      display:flex; flex-direction:column; gap:6px;
+      padding:16px; border:1px solid var(--line); border-radius:12px; background:#fff;
+    }
+    .addr-item .label{
+      font-size:13px; color:var(--gray); font-weight:700;
+    }
+    .addr-item .addr{
+      font-size:16px; font-weight:700;
+    }
+    .addr-actions{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;
+    }
+    .addr-actions a{
+      padding:8px 12px; border-radius:8px; border:1px solid var(--black); font-size:13px; font-weight:700;
+    }
+    .addr-actions a:hover{background:var(--black); color:#fff;}
+
+    /* ===== 하단 CTA ===== */
+    .cta{
+      background:var(--black); color:#fff; text-align:center; padding:36px 0;
+    }
+    .cta .cta-title{
+      font-size:20px; font-weight:800; margin-bottom:8px;
+    }
+    .cta .cta-sub{font-size:14px; opacity:0.9; margin-bottom:12px;}
+    .cta .cta-tel{font-size:26px; font-weight:900; letter-spacing:0.6px;}
+    .cta .cta-note{font-size:12px; opacity:0.8; margin-top:6px;}
+
+    /* ===== 푸터 ===== */
+    footer{
+      padding:26px 0 40px; background:#0f0f0f; color:#cfcfcf; font-size:12.5px;
+    }
+    .footer-grid{
+      display:grid; grid-template-columns:1fr; gap:8px;
+    }
+    .footer-links a{color:#fff; font-weight:700; margin-right:8px;}
+    .footer-tel{font-size:15px; font-weight:800; color:#fff; margin-top:6px;}
+
+    /* ===== 반응형 ===== */
+    @media (max-width: 960px){
+      nav{display:none;}
+      .m-btn{display:inline-flex; align-items:center; justify-content:center;}
+      .header-cta{gap:8px;}
+      .sub-hero{height:200px;}
+      .sub-hero .title{font-size:28px;}
+    }
+    @media (max-width: 560px){
+      .sub-tabs a{padding:14px 14px;}
+      section{padding:46px 0;}
+      .section-title{font-size:22px;}
+      .cta .cta-tel{font-size:22px;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 헤더 ===== -->
+  <header>
+    <div class="wrap header-inner">
+      <a class="logo" href="index.html">
+        <!-- 로고 이미지가 있으면 <img src="images/logo.png" alt="로고" height="24"> -->
+        호정마을 타운하우스
+      </a>
+
+      <!-- PC 메뉴 -->
+      <nav>
+        <ul class="gnb">
+          <li>
+            <a href="sub01_01.html">사업안내</a>
+            <ul class="sub">
+              <li><a href="sub01_01.html">사업개요</a></li>
+              <li><a href="sub01_02.html">입지환경</a></li>
+              <li><a href="sub01_03.html">오시는길</a></li>
+            </ul>
+          </li>
+
+          <li>
+            <a href="sub02_01.html">하이엔드</a>
+            <ul class="sub">
+              <li><a href="sub02_01.html">하이엔드</a></li>
+            </ul>
+          </li>
+
+          <li>
+            <a href="sub03_01.html">단지</a>
+            <ul class="sub">
+              <li><a href="sub03_01.html">단지소개</a></li>
+              <li><a href="sub03_02.html">커뮤니티</a></li>
+            </ul>
+          </li>
+
+          <li>
+            <a href="sub04_01.html">세대</a>
+            <ul class="sub">
+              <li><a href="sub04_01.html">세대안내</a></li>
+              <li><a href="sub04_02.html">인테리어</a></li>
+            </ul>
+          </li>
+
+          <li>
+            <a href="sub05_01.html">관심고객등록</a>
+            <ul class="sub">
+              <li><a href="sub05_01.html">관심고객등록</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- 우측 CTA -->
+      <div class="header-cta">
+        <a class="btn" href="sub05_01.html">방문예약하기</a>
+        <div class="tel">1866-2665</div>
+        <button class="m-btn" id="mBtn" aria-label="모바일 메뉴 열기">≡</button>
+      </div>
+    </div>
+
+    <!-- 모바일 메뉴 -->
+    <div class="m-nav" id="mNav">
+      <div class="m-item">
+        <button type="button" data-open="mSub1">사업안내 <span>▾</span></button>
+        <div class="m-sub" id="mSub1">
+          <a href="sub01_01.html">사업개요</a>
+          <a href="sub01_02.html">입지환경</a>
+          <a href="sub01_03.html">오시는길</a>
+        </div>
+      </div>
+
+      <div class="m-item">
+        <button type="button" data-open="mSub2">하이엔드 <span>▾</span></button>
+        <div class="m-sub" id="mSub2">
+          <a href="sub02_01.html">하이엔드</a>
+        </div>
+      </div>
+
+      <div class="m-item">
+        <button type="button" data-open="mSub3">단지 <span>▾</span></button>
+        <div class="m-sub" id="mSub3">
+          <a href="sub03_01.html">단지소개</a>
+          <a href="sub03_02.html">커뮤니티</a>
+        </div>
+      </div>
+
+      <div class="m-item">
+        <button type="button" data-open="mSub4">세대 <span>▾</span></button>
+        <div class="m-sub" id="mSub4">
+          <a href="sub04_01.html">세대안내</a>
+          <a href="sub04_02.html">인테리어</a>
+        </div>
+      </div>
+
+      <div class="m-item">
+        <button type="button" onclick="location.href='sub05_01.html'">관심고객등록</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== 서브 히어로 ===== -->
+  <div class="sub-hero">
+    <div class="wrap">
+      <div class="title">오시는길</div>
+      <div class="crumb">사업안내 · 오시는길</div>
+    </div>
+  </div>
+
+  <!-- ===== 서브 탭 ===== -->
+  <div class="sub-tabs">
+    <div class="wrap">
+      <ul>
+        <li><a href="sub01_01.html">사업개요</a></li>
+        <li><a href="sub01_02.html">입지환경</a></li>
+        <li><a class="active" href="sub01_03.html">오시는길</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 콘텐츠: 오시는길 ===== -->
+  <section>
+    <div class="wrap">
+      <div class="section-title">오시는길</div>
+
+      <div class="map-box">
+        <!-- 1번 스타일: 실제 지도 위젯이 아니라 지도 이미지 -->
+        <img class="map-img" src="images/map.jpg" alt="현장 위치 지도 이미지">
+
+        <div class="addr-wrap">
+
+          <!-- 현장 -->
+          <div class="addr-item">
+            <div class="label">현장</div>
+            <div class="addr">충남 천안시 동남구 풍세면 풍서리 707 일원</div>
+            <div class="addr-actions">
+              <a href="https://naver.me/xxxxxx" target="_blank" rel="noopener">네이버맵</a>
+              <a href="https://kko.kakao.com/xxxxxx" target="_blank" rel="noopener">카카오맵</a>
+            </div>
+          </div>
+
+          <!-- 주택홍보관 -->
+          <div class="addr-item">
+            <div class="label">주택홍보관</div>
+            <div class="addr">충남 천안시 동남구 풍세면 풍서리 000-0</div>
+            <div class="label">(현장 홍보관 / 예약제 운영)</div>
+            <div class="addr-actions">
+              <a href="https://naver.me/xxxxxx" target="_blank" rel="noopener">네이버맵</a>
+              <a href="https://kko.kakao.com/xxxxxx" target="_blank" rel="noopener">카카오맵</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 하단 CTA ===== -->
+  <div class="cta">
+    <div class="wrap">
+      <div class="cta-title">방문예약</div>
+      <div class="cta-sub">방문 전 예약을 해 주셔야 관람이 가능합니다.</div>
+      <div class="cta-tel">1866-2665</div>
+      <div class="cta-note">상담시간 09:00 ~ 18:00</div>
+    </div>
+  </div>
+
+  <!-- ===== 푸터 ===== -->
+  <footer>
+    <div class="wrap footer-grid">
+      <div class="footer-links">
+        <a href="index.html">홈</a>
+        <a href="sub05_01.html">관심고객등록</a>
+        <a href="privacy.html">개인정보처리방침</a>
+      </div>
+
+      <div>시행 · 호정마을타운하우스</div>
+      <div>시공 · (주)○○건설</div>
+      <div>세대구성 · 23세대</div>
+
+      <div class="footer-tel">1866-2665</div>
+
+      <div>(주)○○ | 주소 : 충남 천안시 동남구 ○○로 00 | 사업자등록번호 : 000-00-00000</div>
+      <div>© HOJEONGMAEUL TOWNHOUSE. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // 모바일 메뉴 토글
+    const mBtn = document.getElementById('mBtn');
+    const mNav = document.getElementById('mNav');
+    mBtn.addEventListener('click', () => {
+      const open = mNav.style.display === 'block';
+      mNav.style.display = open ? 'none' : 'block';
+    });
+
+    // 모바일 2단 토글
+    document.querySelectorAll('.m-item > button[data-open]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.getAttribute('data-open');
+        const box = document.getElementById(id);
+        const open = box.style.display === 'block';
+        box.style.display = open ? 'none' : 'block';
+      });
+    });
+  </script>
+</body>
+</html>
