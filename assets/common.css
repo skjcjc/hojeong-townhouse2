@@ -150,12 +150,11 @@ section{padding:60px 0;}
   object-fit:unset;   
   background:#ddd;
 }
-
-}
 .addr-wrap{display:grid; grid-template-columns:1fr; gap:16px; padding:20px;}
 .addr-item{
   display:flex; flex-direction:column; gap:6px;
   padding:16px; border:1px solid var(--line); border-radius:12px; background:#fff;
 }
 .addr-item .label{font-size:13px; color:
+
 
